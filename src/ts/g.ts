@@ -185,13 +185,13 @@ class UserInformation {
 }
 
 function validateAge(birthday: Date): number {
-  const ageDiff = Date.now() - birthday.getTime();
-  const ageDate = new Date(ageDiff);
+  let ageDiff = Date.now() - birthday.getTime();
+  let ageDate = new Date(ageDiff);
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
 
 function getAge(data: UserInformation): number {
-  const userAge = validateAge(data.birthday);
+  let userAge = validateAge(data.birthday);
 
   if (userAge < 20) {
     throw new Error("Du är under 20 år");
