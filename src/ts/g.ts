@@ -25,7 +25,7 @@ class Student {
   ) {}
 }
 
-function getStudentStatus(student: Student): string {
+function getStudentGrade(student: Student): string {
   let passed = false;
   if (student.name === "Nikolaj") {
     passed = student.handedInOnTime;
@@ -52,15 +52,15 @@ class Temperature {
 }
 
 function averageWeeklyTemperature(temperatures: Temperature[]): number {
-  const now = Date.now();
-  const MILLISECONDS_IN_A_WEEK = 7 * 24 * 60 * 60 * 1000;
+  const currentMoment = Date.now();
+  const MILLISECONDS_IN_ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
   let sum = 0;
   let count = 0;
 
   for (const temp of temperatures) {
     if (
       temp.location === "Helsingborg" &&
-      temp.date.getTime() > now - MILLISECONDS_IN_A_WEEK
+      temp.date.getTime() > currentMoment - MILLISECONDS_IN_ONE_WEEK
     ) {
       sum += temp.temperature;
       count++;
@@ -75,27 +75,47 @@ function averageWeeklyTemperature(temperatures: Temperature[]): number {
   Se om du kan göra det bättre. Inte bara presentationen räknas, även strukturer.
   */
 
-function showProduct(
-  name: string,
-  price: number,
-  amount: number,
-  description: string,
-  image: string,
-  parent: HTMLElement
-) {
+class ProductData {
+  constructor(
+    public name: string,
+    public price: number,
+    public description: string,
+    public image: string,
+    public parent: HTMLElement
+  ) {}
+}
+
+function createProductElement(productInformation: ProductData): HTMLElement {
+  const { name, price, description, image } = productInformation;
+
   let container = document.createElement("div");
+  container.classList.add("product");
+
   let title = document.createElement("h4");
-  let pris = document.createElement("strong");
-  let imageTag = document.createElement("img");
-
-  title.innerHTML = name;
-  pris.innerHTML = price.toString();
-  imageTag.src = image;
-
+  title.textContent = name;
   container.appendChild(title);
+
+  let imageTag = document.createElement("img");
+  imageTag.src = image;
   container.appendChild(imageTag);
-  container.appendChild(pris);
-  parent.appendChild(container);
+
+  let productDescription = document.createElement("p");
+  productDescription.textContent = description;
+
+  const productPrice = document.createElement("strong");
+  productPrice.textContent = `Price: ${price} Kr`;
+  container.appendChild(productPrice);
+
+  return container;
+}
+
+function showProducts(productData: ProductData, parent: HTMLElement) {
+  const productElement = createProductElement(productData);
+  if (!productElement) {
+    console.error("Error showing product: product is null or undefined");
+    return;
+  }
+  parent.appendChild(productElement);
 }
 
 /*
