@@ -1,11 +1,12 @@
 /*
 1. Se om du kan hitta problem med koden nedan och se om du kan göra den bättre.
 */
+
 export enum Sort {
   PRICE_ASCENDING = "Stigande pris",
-  PRICE_DECENDING = "Sjunkande pris",
-  NAME_ALPHABETIC = "Alfabetisk ordning",
-  NAME_ALPHABETIC_REVERSE = "Omvänd alfabetisk ordning",
+  PRICE_DESCENDING = "Sjunkande pris",
+  NAME_ASCENDING = "Alfabetisk ordning",
+  NAME_DESCENDING = "Omvänd alfabetisk ordning",
 }
 
 export class Product {
@@ -15,53 +16,23 @@ export class Product {
     public imageUrl: string[],
     public price: number,
     public description: string
-  ) {
-    this.id = id;
-    this.name = name;
-    this.imageUrl = imageUrl;
-    this.price = price;
-    this.description = description;
-  }
+  ) {}
 }
 
 export function sortProductsBy(sort: Sort, products: Product[]): Product[] {
-  let copiedList: Product[] = [];
-  products.forEach((product) => copiedList.push(product));
+  let sortedProducts = products.slice();
 
-  let sortedList: Product[] = [];
   if (sort === Sort.PRICE_ASCENDING) {
-    sortedList = sortList("Price", copiedList);
-    sortedList.reverse();
-  } else if (sort === Sort.PRICE_DECENDING) {
-    sortedList = sortList("Price", copiedList);
-  } else if (sort === Sort.NAME_ALPHABETIC) {
-    sortedList = sortList("Name", copiedList);
-  } else if (sort === Sort.NAME_ALPHABETIC_REVERSE) {
-    sortedList = sortList("Name", copiedList);
-    sortedList.reverse();
+    sortedProducts.sort((a, b) => a.price - b.price);
+  } else if (sort === Sort.PRICE_DESCENDING) {
+    sortedProducts.sort((a, b) => b.price - a.price);
+  } else if (sort === Sort.NAME_ASCENDING) {
+    sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (sort === Sort.NAME_DESCENDING) {
+    sortedProducts.sort((a, b) => b.name.localeCompare(a.name));
   }
 
-  return sortedList;
-}
-
-function sortList(whichAttribute: string, products: Product[]): Product[] {
-  return products.sort((p1, p2) => {
-    if (whichAttribute === "Price") {
-      if (p1.price < p2.price) {
-        return 1;
-      } else if (p1.price > p2.price) {
-        return -1;
-      }
-      return 0;
-    } else {
-      if (p1.name < p2.name) {
-        return 1;
-      } else if (p1.name > p2.name) {
-        return -1;
-      }
-      return 0;
-    }
-  });
+  return sortedProducts;
 }
 
 /*
